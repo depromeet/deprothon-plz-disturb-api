@@ -27,10 +27,8 @@ class MemberTest {
         // when
         val member = memberService.createMember(name, imageContainer)
         // then
-        assertThat(member.id).isEqualTo(1)
         assertThat(member.name).isEqualTo("name")
         assertThat(member.imageUrl).isEqualTo(imageContainer)
-
         assertThat(memberRepository.get(member.id)).isNotNull
     }
 }
