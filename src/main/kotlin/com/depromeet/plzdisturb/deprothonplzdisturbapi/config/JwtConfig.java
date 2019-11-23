@@ -1,6 +1,5 @@
 package com.depromeet.plzdisturb.deprothonplzdisturbapi.config;
 
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.jwt.JwtFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
