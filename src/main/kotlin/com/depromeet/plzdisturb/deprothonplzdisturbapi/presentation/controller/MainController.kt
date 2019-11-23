@@ -4,12 +4,10 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Member
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Room
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.*
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.controller.response.Response
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping("/api")
 class MainController(
     private val createRoom: CreateRoom,
     private val getMember: GetMember,
