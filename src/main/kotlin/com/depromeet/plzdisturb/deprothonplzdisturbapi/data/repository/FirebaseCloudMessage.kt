@@ -1,19 +1,23 @@
 package com.depromeet.plzdisturb.deprothonplzdisturbapi.data.repository
 
+import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.WebpushNotification
 import com.google.firebase.messaging.WebpushConfig
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import java.util.concurrent.ExecutionException
 
-
-object FirebaseCloudMessage {
+@Component
+class FirebaseCloudMessage(
+    app: FirebaseApp
+) {
 
     private val logger = LoggerFactory.getLogger(FirebaseCloudMessage::class.java)
 
-    private val instance = FirebaseMessaging.getInstance()
+    private val instance = FirebaseMessaging.getInstance(app)
 
     @Throws(InterruptedException::class, ExecutionException::class)
     fun send(token: List<String>, title: String, message: String) {

@@ -15,7 +15,8 @@ class MainController(
     private val getMember: GetMember,
     private val getMyRooms: GetMyRooms,
     private val getRoom: GetRoom,
-    private val joinRoom: JoinRoom
+    private val joinRoom: JoinRoom,
+    private val doDisturb: DoDisturb
 ) {
 
     @PostMapping("/room", consumes = ["application/json"])
@@ -54,6 +55,16 @@ class MainController(
                 JoinRoom.Param(
                     0,
                     code
+                )
+            )
+        )
+
+    @PostMapping("/disturb", consumes = ["application/json"])
+    fun disturb(@RequestParam("token") token: List<String>) =
+        Response(
+            doDisturb.execute(
+                DoDisturb.Param(
+                    token
                 )
             )
         )
