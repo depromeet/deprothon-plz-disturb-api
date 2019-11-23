@@ -1,7 +1,7 @@
 package com.depromeet.plzdisturb.deprothonplzdisturbapi.integration
 
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.ImageContainer
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.MemberService
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.CreateMember
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class MemberTest {
     @Autowired
-    private lateinit var memberService : MemberService
+    private lateinit var memberService : CreateMember
     @Autowired
     private lateinit var memberRepository : MemberRepository
 

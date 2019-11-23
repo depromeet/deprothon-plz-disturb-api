@@ -8,17 +8,26 @@ import javax.persistence.Id
 
 @Entity
 data class MemberData(
-        @Id
-        @GeneratedValue
-        val id: Int?,
-        val name: String,
-        val imageUrl: String?
+    @Id
+    @GeneratedValue
+    val id: Int?,
+    val name: String,
+    val imageUrl: String?
 )
 
 fun MemberData.toEntity() = Member(
-        id!!,
-        name,
-        imageUrl?.let {
-            ImageContainer.Image(it)
-        } ?: ImageContainer.NONE
+    id!!,
+    name,
+    imageUrl?.let {
+        ImageContainer.Image(it)
+    } ?: ImageContainer.NONE
+)
+
+fun Member.toDataModel() = MemberData(
+    id,
+    name,
+    when (imageUrl) {
+        is ImageContainer.Image -> imageUrl.url
+        ImageContainer.NONE -> null
+    }
 )

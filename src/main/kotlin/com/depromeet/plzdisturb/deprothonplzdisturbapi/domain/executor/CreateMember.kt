@@ -6,7 +6,16 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberR
 import org.springframework.stereotype.Service
 
 @Service
-class MemberService(private val memberRepository: MemberRepository) {
+class CreateMember(
+    private val memberRepository: MemberRepository
+) : Executor<CreateMember.Param, Member> {
 
-    fun createMember(name: String, imageContainer: ImageContainer): Member = memberRepository.createMember(name, imageContainer)
+    override fun execute(param: Param): Member = param.let { (name, image) ->
+        memberRepository.add(name, image)
+    }
+
+    data class Param(
+        val name: String,
+        val image: ImageContainer
+    ) : Executor.Param
 }
