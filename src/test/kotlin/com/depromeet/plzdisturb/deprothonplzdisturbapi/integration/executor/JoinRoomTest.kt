@@ -7,19 +7,25 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.*
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.jwt.JwtFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.jupiter.api.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 
 @Suppress("NonAsciiCharacters")
 @Transactional
 @SpringBootTest
 class JoinRoomTest {
+
+    @Autowired
+    private lateinit var jwtFactory: JwtFactory
 
     @Autowired
     private lateinit var createRoom: CreateRoom
@@ -53,6 +59,7 @@ class JoinRoomTest {
                 "device"
             )
         )
+        val memberId = jwtFactory.decodeToken("bearer ${token.value}").get()
         val dummy2 = AccessToken("ss2")
         Mockito.`when`(kakaoRepository.getUserInfo(dummy2.value)).thenReturn(
             KakaoUserResponse(
@@ -70,12 +77,13 @@ class JoinRoomTest {
                 "device"
             )
         )
+        val memberId2 = jwtFactory.decodeToken("bearer ${token2.value}").get()
         val room = createRoom.execute(
-            CreateRoom.Param("group", 1)
+            CreateRoom.Param("group", memberId)
         )
         // when
         val target = joinRoom.execute(
-            JoinRoom.Param(2, room.code)
+            JoinRoom.Param(memberId2, room.code)
         )
         // then
         assertThat(target).isEqualTo(room)

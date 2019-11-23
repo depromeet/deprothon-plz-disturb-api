@@ -5,6 +5,7 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.GetMember
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.Login
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.jwt.JwtFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -17,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @SpringBootTest
 class GetMemberTest {
+
+    @Autowired
+    private lateinit var jwtFactory: JwtFactory
 
     @Autowired
     private lateinit var getMember: GetMember
@@ -47,11 +51,12 @@ class GetMemberTest {
                 "device"
             )
         )
+        val memberId = jwtFactory.decodeToken("bearer ${token.value}").get()
         // when
         val target = getMember.execute(
-            GetMember.Param(1)
+            GetMember.Param(memberId)
         )
         // then
-        assertThat(target.id).isEqualTo(1)
+        assertThat(target.id).isEqualTo(memberId)
     }
 }

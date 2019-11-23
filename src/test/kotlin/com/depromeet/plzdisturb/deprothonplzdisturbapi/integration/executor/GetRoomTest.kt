@@ -6,6 +6,7 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.GetRoom
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.Login
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.jwt.JwtFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class GetRoomTest {
 
+    @Autowired
+    private lateinit var jwtFactory: JwtFactory
 
     @Autowired
     private lateinit var createRoom: CreateRoom
@@ -53,12 +56,14 @@ class GetRoomTest {
                 "device"
             )
         )
+        val memberId = jwtFactory.decodeToken("bearer ${token.value}").get()
+
         val room = createRoom.execute(
-            CreateRoom.Param("group", 1)
+            CreateRoom.Param("group", memberId)
         )
         // when
         val target = getRoom.execute(
-            GetRoom.Param(1, room.code)
+            GetRoom.Param(memberId, room.code)
         )
         // then
         assertThat(target).isEqualTo(room)

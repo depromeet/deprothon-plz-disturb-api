@@ -16,10 +16,12 @@ class FCMConfig {
     }
 
     @Bean
-    fun firebaseApp(): FirebaseApp = FirebaseOptions.Builder()
+    fun app(): FirebaseApp = FirebaseOptions.Builder()
         .setCredentials(
             GoogleCredentials.fromStream(ClassPathResource(FIREBASE_CONFIG_PATH).inputStream)
         ).build().let {
-            FirebaseApp.initializeApp(it)
+            if (FirebaseApp.getApps().isEmpty())
+                FirebaseApp.initializeApp(it)
+            else FirebaseApp.getApps().first()
         }
 }

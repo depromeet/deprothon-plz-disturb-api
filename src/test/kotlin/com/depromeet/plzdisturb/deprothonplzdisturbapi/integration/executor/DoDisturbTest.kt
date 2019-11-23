@@ -5,6 +5,7 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.DoDisturb
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.Login
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.jwt.JwtFactory
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @SpringBootTest
 class DoDisturbTest {
+
+    @Autowired
+    private lateinit var jwtFactory: JwtFactory
 
     @Autowired
     private lateinit var doDisturb: DoDisturb
@@ -47,8 +51,9 @@ class DoDisturbTest {
                 "device"
             )
         )
+        val memberId = jwtFactory.decodeToken("bearer ${token.value}").get()
         doDisturb.execute(
-            DoDisturb.Param(1)
+            DoDisturb.Param(memberId)
         )
     }
 }
