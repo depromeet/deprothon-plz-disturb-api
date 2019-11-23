@@ -12,7 +12,9 @@ data class MemberData(
     @GeneratedValue
     val id: Int?,
     val name: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+    val providerId: String,
+    val providerUserId: String
 )
 
 fun MemberData.toEntity() = Member(
@@ -20,7 +22,9 @@ fun MemberData.toEntity() = Member(
     name,
     imageUrl?.let {
         ImageContainer.Image(it)
-    } ?: ImageContainer.NONE
+    } ?: ImageContainer.NONE,
+    providerId,
+    providerUserId
 )
 
 fun Member.toDataModel() = MemberData(
@@ -29,5 +33,7 @@ fun Member.toDataModel() = MemberData(
     when (imageUrl) {
         is ImageContainer.Image -> imageUrl.url
         ImageContainer.NONE -> null
-    }
+    },
+    providerId,
+    providerUserId
 )

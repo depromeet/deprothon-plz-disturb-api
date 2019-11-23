@@ -14,14 +14,21 @@ class MemberRepositoryImpl(
     private val jpaMemberRepository: MemberJpaRepository
 ) : MemberRepository {
 
-    override fun add(name: String, image: ImageContainer): Member = jpaMemberRepository.save(
+    override fun getByOAuthUserId(providerId: String, providerUserId: String): Member? = jpaMemberRepository.findByProviderIdAndProviderUserId(providerId, providerUserId)?.toEntity()
+
+    override fun add(name: String,
+                     image: ImageContainer,
+                     providerId: String,
+                     providerUserId: String): Member = jpaMemberRepository.save(
         MemberData(
-            null,
-            name,
-            when (image) {
-                is ImageContainer.Image -> image.url
-                ImageContainer.NONE -> null
-            }
+                null,
+                name,
+                when (image) {
+                    is ImageContainer.Image -> image.url
+                    ImageContainer.NONE -> null
+                },
+                providerId,
+                providerUserId
         )
     ).let { it.toEntity() }
 
