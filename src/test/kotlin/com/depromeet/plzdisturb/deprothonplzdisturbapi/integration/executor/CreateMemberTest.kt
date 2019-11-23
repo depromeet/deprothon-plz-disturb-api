@@ -1,4 +1,4 @@
-package com.depromeet.plzdisturb.deprothonplzdisturbapi.integration
+package com.depromeet.plzdisturb.deprothonplzdisturbapi.integration.executor
 
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.ImageContainer
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.CreateMember
@@ -12,20 +12,22 @@ import org.springframework.transaction.annotation.Transactional
 @Suppress("NonAsciiCharacters")
 @Transactional
 @SpringBootTest
-class MemberTest {
+class CreateMemberTest {
     @Autowired
-    private lateinit var memberService : CreateMember
+    private lateinit var memberService: CreateMember
     @Autowired
-    private lateinit var memberRepository : MemberRepository
+    private lateinit var memberRepository: MemberRepository
 
     @Test
-    fun 멤버가_잘_생성되는지() {
+    fun test_execute() {
         // given
         val name = "name";
         val imageUrl = "imageUrl"
         val imageContainer = ImageContainer.Image(imageUrl)
         // when
-        val member = memberService.createMember(name, imageContainer)
+        val member = memberService.execute(
+            CreateMember.Param(name, imageContainer)
+        )
         // then
         assertThat(member.name).isEqualTo("name")
         assertThat(member.imageUrl).isEqualTo(imageContainer)
