@@ -8,9 +8,10 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Member
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Room
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.RoomMemberRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 
-@Repository
+@Component
 class RoomMemberRepositoryImpl(
     private val jpaRepository: RoomMemberJpaRepository
 ) : RoomMemberRepository {

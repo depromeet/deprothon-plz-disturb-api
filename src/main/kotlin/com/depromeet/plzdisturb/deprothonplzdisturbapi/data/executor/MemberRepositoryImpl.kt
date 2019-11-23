@@ -7,9 +7,9 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.ImageContai
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Member
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberRepository
 import org.springframework.data.domain.Sort
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
 
-@Repository
+@Component
 class MemberRepositoryImpl(
     private val jpaMemberRepository: MemberJpaRepository
 ) : MemberRepository {
