@@ -17,7 +17,7 @@ public class LoginController {
     public LoginResponse login(LoginRequest loginRequest) {
         String kakaoAccessToken = loginRequest.getAccessToken();
         AccessToken accessToken = new AccessToken(kakaoAccessToken);
-        AccessToken responseAccessToken = login.execute(new Login.Param(accessToken));
+        AccessToken responseAccessToken = login.execute(new Login.Param(accessToken, loginRequest.getDeviceToken()));
         return new LoginResponse(responseAccessToken.getValue());
     }
 }

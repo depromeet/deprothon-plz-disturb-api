@@ -14,7 +14,8 @@ data class MemberData(
     val name: String,
     val imageUrl: String?,
     val providerId: String,
-    val providerUserId: String
+    val providerUserId: String,
+    val deviceToken: String
 )
 
 fun MemberData.toEntity() = Member(
@@ -24,7 +25,8 @@ fun MemberData.toEntity() = Member(
         ImageContainer.Image(it)
     } ?: ImageContainer.NONE,
     providerId,
-    providerUserId
+    providerUserId,
+    deviceToken
 )
 
 fun Member.toDataModel() = MemberData(
@@ -35,5 +37,6 @@ fun Member.toDataModel() = MemberData(
         ImageContainer.NONE -> null
     },
     providerId,
-    providerUserId
+    providerUserId,
+    deviceToken
 )

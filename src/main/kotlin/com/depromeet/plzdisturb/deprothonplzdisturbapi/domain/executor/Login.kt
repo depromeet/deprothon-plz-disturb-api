@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class Login(
-        private val kakaoRepository: OAuthRepository,
-        private val memberRepository: MemberRepository,
-        private val jwtFactory: JwtFactory
+    private val kakaoRepository: OAuthRepository,
+    private val memberRepository: MemberRepository,
+    private val jwtFactory: JwtFactory
 ) : Executor<Login.Param, AccessToken> {
     @Transactional
     override fun execute(param: Param): AccessToken {
@@ -26,18 +26,20 @@ class Login(
         }
         // 있으면 로그인 없으면 생성
         return AccessToken(
-                jwtFactory.generateToken(
-                        memberRepository.add(
-                                kakaoUserResponse.getUserName(),
-                                ImageContainer.Image(kakaoUserResponse.getProfileImage()),
-                                "kakao",
-                                kakaoUserResponse.id.toString()
-                        )
+            jwtFactory.generateToken(
+                memberRepository.add(
+                    kakaoUserResponse.getUserName(),
+                    ImageContainer.Image(kakaoUserResponse.getProfileImage()),
+                    "kakao",
+                    kakaoUserResponse.id.toString(),
+                    param.deviceToken
                 )
+            )
         )
     }
 
     data class Param(
-            val kakaoAccessToken: AccessToken
+        val kakaoAccessToken: AccessToken,
+        val deviceToken: String
     ) : Executor.Param
 }

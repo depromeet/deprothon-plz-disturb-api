@@ -3,6 +3,7 @@ package com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.controller
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Member
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Room
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.*
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.controller.Request.Request
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.controller.response.Response
 import org.springframework.web.bind.annotation.*
 
@@ -18,51 +19,62 @@ class MainController(
 ) {
 
     @PostMapping("/room", consumes = ["application/json"])
-    fun createRoom(@RequestParam("name") name: String): Response<Room> =
+    fun createRoom(
+        @RequestAttribute("memberId") id: Int,
+        @RequestBody body: Request<String>
+    ): Response<Room> =
         Response(
             createRoom.execute(
                 CreateRoom.Param(
-                    name,
-                    0
+                    body.data,
+                    id
                 )
             )
         )
 
     @GetMapping("/member", consumes = ["application/json"])
-    fun getMember(@RequestParam("member_id") id: Int): Response<Member> =
+    fun getMember(@RequestAttribute("memberId") id: Int): Response<Member> =
         Response(
             getMember.execute(GetMember.Param(id))
         )
 
     @GetMapping("/room", consumes = ["application/json"])
-    fun getRoom(@RequestParam("code") code: String): Response<Room> =
+    fun getRoom(
+        @RequestAttribute("memberId") id: Int,
+        @RequestParam("code") code: String
+    ): Response<Room> =
         Response(
-            getRoom.execute(GetRoom.Param(0, code))
+            getRoom.execute(GetRoom.Param(id, code))
         )
 
     @GetMapping("/me/room", consumes = ["application/json"])
-    fun getRoom(): Response<List<Room>> =
+    fun getRoom(
+        @RequestAttribute("memberId") id: Int
+    ): Response<List<Room>> =
         Response(
-            getMyRooms.execute(GetMyRooms.Param(0))
+            getMyRooms.execute(GetMyRooms.Param(id))
         )
 
     @PostMapping("/room/join", consumes = ["application/json"])
-    fun joinRoom(@RequestParam("code") code: String): Response<Room> =
+    fun joinRoom(
+        @RequestAttribute("memberId") id: Int,
+        @RequestBody body: Request<String>
+    ): Response<Room> =
         Response(
             joinRoom.execute(
                 JoinRoom.Param(
-                    0,
-                    code
+                    id,
+                    body.data
                 )
             )
         )
 
     @PostMapping("/disturb", consumes = ["application/json"])
-    fun disturb(@RequestParam("token") token: List<String>) =
+    fun disturb(@RequestParam body: Request<Int>) =
         Response(
             doDisturb.execute(
                 DoDisturb.Param(
-                    token
+                    body.data
                 )
             )
         )

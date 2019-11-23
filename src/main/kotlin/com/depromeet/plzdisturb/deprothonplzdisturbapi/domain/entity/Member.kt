@@ -5,7 +5,8 @@ data class Member(
     val name: String,
     val imageUrl: ImageContainer,
     val providerId: String,
-    val providerUserId: String
+    val providerUserId: String,
+    val deviceToken: String
 ) : Entity {
 
     override fun equals(other: Any?): Boolean {

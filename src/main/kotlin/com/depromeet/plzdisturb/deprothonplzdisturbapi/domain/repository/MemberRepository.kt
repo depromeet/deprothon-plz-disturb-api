@@ -6,9 +6,16 @@ import org.springframework.data.domain.Sort
 
 interface MemberRepository : Repository {
 
-    fun add(name: String, image: ImageContainer, providerId: String, providerUserId: String) : Member
+    fun add(
+        name: String,
+        image: ImageContainer,
+        providerId: String,
+        providerUserId: String,
+        deviceToken: String
+    ): Member
+
     fun getAll(sort: Sort): List<Member>
     fun getAll(ids: Iterable<Int>): List<Member>
     fun get(id: Int): Member
-    fun getByOAuthUserId(providerId: String, providerUserId: String) : Member?
+    fun getByOAuthUserId(providerId: String, providerUserId: String): Member?
 }
