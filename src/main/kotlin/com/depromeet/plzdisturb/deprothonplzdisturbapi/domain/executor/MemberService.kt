@@ -5,9 +5,7 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberR
 import org.springframework.stereotype.Service
 
 @Service
-class MemberService (private val memberRepository : MemberRepository) {
+class MemberService(private val memberRepository: MemberRepository) {
 
-//    fun createMember(name : String, imageUrl : String?) : Member {
-//        val member = Member(null, name, imageUrl);
-//    }
+    fun createMember(name: String, imageUrl: String?): Member = memberRepository.createMember(name, imageUrl)
 }
