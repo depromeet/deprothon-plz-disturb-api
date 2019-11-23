@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -23,19 +22,13 @@ public class JwtFactory {
     private static final String CLAIM_NAME_MEMBER_ID = "id";
 
     private final String tokenIssuer;
-    private final String tokenSigningKey;
-    private Algorithm algorithm;
-    private JWTVerifier jwtVerifier;
+    private final Algorithm algorithm;
+    private final JWTVerifier jwtVerifier;
 
     public JwtFactory(String tokenIssuer, String tokenSigningKey) {
         this.tokenIssuer = tokenIssuer;
-        this.tokenSigningKey = tokenSigningKey;
-    }
-
-    @PostConstruct
-    public void init() {
-        algorithm = Algorithm.HMAC256(tokenSigningKey);
-        jwtVerifier = JWT.require(algorithm).build();
+        this.algorithm = Algorithm.HMAC256(tokenSigningKey);
+        this.jwtVerifier = JWT.require(algorithm).build();
     }
 
     public String generateToken(Member member) {
