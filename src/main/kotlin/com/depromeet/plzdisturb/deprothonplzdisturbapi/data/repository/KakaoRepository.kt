@@ -15,7 +15,9 @@ import org.springframework.web.util.UriComponentsBuilder
 class KakaoRepository(
         private val restTemplate: RestTemplate
 ) : OAuthRepository {
-    fun getUserInfo(accessToken: String): KakaoUserResponse? {
+
+    @Throws(IllegalStateException::class)
+    override fun getUserInfo(accessToken: String): KakaoUserResponse {
         val requestUrl = UriComponentsBuilder.fromHttpUrl("https://kapi.kakao.com/v2/user/me")
                 .build(true)
                 .toUri()
@@ -25,10 +27,10 @@ class KakaoRepository(
 
         val httpEntity = HttpEntity<Any>(httpHeaders)
 
-        val responseEntity = restTemplate!!.exchange(requestUrl, HttpMethod.GET, httpEntity, KakaoUserResponse::class.java)
+        val responseEntity = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, KakaoUserResponse::class.java)
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw KakaoApiFailedException("Failed to get User details from kakao api. status:" + responseEntity.getStatusCode())
         }
-        return responseEntity.getBody()
+        return responseEntity.body ?: throw IllegalStateException()
     }
 }
