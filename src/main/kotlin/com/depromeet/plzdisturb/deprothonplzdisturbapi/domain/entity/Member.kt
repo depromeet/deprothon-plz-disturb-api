@@ -1,9 +1,6 @@
 package com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity
 
-import javax.persistence.Id
-
 data class Member(
-    @Id
     val id: Int,
     val name: String,
     val imageUrl: ImageContainer
