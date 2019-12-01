@@ -1,14 +1,11 @@
 package com.depromeet.plzdisturb.deprothonplzdisturbapi.integration.executor
 
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.data.model.kakao.KakaoUserResponse
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.ImageContainer
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.CreateRoom
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.GetMyRooms
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.Login
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.DoDisturbService
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.LoginService
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.jwt.JwtFactory
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,22 +16,19 @@ import org.springframework.transaction.annotation.Transactional
 @Suppress("NonAsciiCharacters")
 @Transactional
 @SpringBootTest
-class GetMyRoomsTest {
+class DoDisturbServiceTest {
 
     @Autowired
     private lateinit var jwtFactory: JwtFactory
 
     @Autowired
-    private lateinit var createRoom: CreateRoom
-
-    @Autowired
-    private lateinit var getMyRooms: GetMyRooms
+    private lateinit var doDisturbService: DoDisturbService
 
     @MockBean
     private lateinit var kakaoRepository: OAuthRepository
 
     @Autowired
-    private lateinit var login: Login
+    private lateinit var loginService: LoginService
 
     @Test
     fun test_execute() {
@@ -50,21 +44,16 @@ class GetMyRoomsTest {
                 )
             )
         )
-        val token = login.execute(
-            Login.Param(
+
+        val token = loginService.execute(
+            LoginService.Param(
                 dummy,
                 "device"
             )
         )
         val memberId = jwtFactory.decodeToken("bearer ${token.value}").get()
-        val room = createRoom.execute(
-            CreateRoom.Param("group", memberId)
+        doDisturbService.execute(
+            DoDisturbService.Param(memberId, memberId)
         )
-        // when
-        val target = getMyRooms.execute(
-            GetMyRooms.Param(memberId)
-        )
-        // then
-        assertThat(target).isEqualTo(listOf(room))
     }
 }

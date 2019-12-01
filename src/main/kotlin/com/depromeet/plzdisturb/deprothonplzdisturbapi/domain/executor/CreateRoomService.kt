@@ -5,15 +5,17 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberR
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.RoomMemberRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.RoomRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class CreateRoom(
+class CreateRoomService(
     private val roomRepository: RoomRepository,
     private val memberRepository: MemberRepository,
     private val roomMemberRepository: RoomMemberRepository
-) : Executor<CreateRoom.Param, Room> {
+) : Executor<CreateRoomService.Param, Room> {
 
+    @Transactional
     override fun execute(param: Param): Room = param.let { (name, memberId) ->
         val room = roomRepository.add(
             name,

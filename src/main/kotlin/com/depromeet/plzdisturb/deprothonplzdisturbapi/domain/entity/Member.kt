@@ -21,4 +21,10 @@ data class Member(
     }
 
     override fun hashCode(): Int = id
+
+    fun resolveImageUrl() =
+        when (imageUrl) {
+            is ImageContainer.Image -> imageUrl.url
+            ImageContainer.NONE -> ""
+        }
 }

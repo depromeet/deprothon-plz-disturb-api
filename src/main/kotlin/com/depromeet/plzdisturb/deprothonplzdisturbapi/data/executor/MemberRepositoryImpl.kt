@@ -6,6 +6,8 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.data.repository.MemberJpa
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.ImageContainer
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Member
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
@@ -13,6 +15,9 @@ import org.springframework.stereotype.Component
 class MemberRepositoryImpl(
     private val jpaMemberRepository: MemberJpaRepository
 ) : MemberRepository {
+    override fun findAll(pageable: Pageable): Page<Member> =
+        jpaMemberRepository.findAll(pageable)
+            .map { memberData -> memberData.toEntity() }
 
     override fun getByOAuthUserId(providerId: String, providerUserId: String): Member? = jpaMemberRepository.findByProviderIdAndProviderUserId(providerId, providerUserId)?.toEntity()
 
