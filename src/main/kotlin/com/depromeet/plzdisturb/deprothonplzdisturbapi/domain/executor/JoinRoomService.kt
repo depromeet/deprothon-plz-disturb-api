@@ -16,6 +16,7 @@ class JoinRoomService(
 
     @Transactional
     override fun execute(param: Param): Room = param.let { (memberId, code) ->
+        // TODO: 이미 멤버가 room 에 속해있는 경우, 더 진행하지 않아야함
         val room = roomRepository.get(code)
         val member = memberRepository.get(memberId)
         roomMemberRepository.add(room, member)
