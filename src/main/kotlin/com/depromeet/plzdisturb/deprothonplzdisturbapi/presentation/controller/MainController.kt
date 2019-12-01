@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api")
 class MainController(
-    private val createRoom: CreateRoom,
     private val getMember: GetMember,
     private val getMyRooms: GetMyRooms,
     private val getRoom: GetRoom,
@@ -18,27 +17,13 @@ class MainController(
     private val doDisturb: DoDisturb
 ) {
 
-    @PostMapping("/room", consumes = ["application/json"])
-    fun createRoom(
-        @RequestAttribute("memberId") id: Int,
-        @RequestBody body: Request<String>
-    ): Response<Room> =
-        Response(
-            createRoom.execute(
-                CreateRoom.Param(
-                    body.data,
-                    id
-                )
-            )
-        )
-
-    @GetMapping("/member", consumes = ["application/json"])
+    @GetMapping("/members", consumes = ["application/json"])
     fun getMember(@RequestAttribute("memberId") id: Int): Response<Member> =
         Response(
             getMember.execute(GetMember.Param(id))
         )
 
-    @GetMapping("/room", consumes = ["application/json"])
+    @GetMapping("/rooms", consumes = ["application/json"])
     fun getRoom(
         @RequestAttribute("memberId") id: Int,
         @RequestParam("code") code: String
@@ -47,7 +32,7 @@ class MainController(
             getRoom.execute(GetRoom.Param(id, code))
         )
 
-    @GetMapping("/me/room", consumes = ["application/json"])
+    @GetMapping("/me/rooms", consumes = ["application/json"])
     fun getRoom(
         @RequestAttribute("memberId") id: Int
     ): Response<List<Room>> =
@@ -55,7 +40,7 @@ class MainController(
             getMyRooms.execute(GetMyRooms.Param(id))
         )
 
-    @PostMapping("/room/join", consumes = ["application/json"])
+    @PostMapping("/rooms/join", consumes = ["application/json"])
     fun joinRoom(
         @RequestAttribute("memberId") id: Int,
         @RequestBody body: Request<String>
