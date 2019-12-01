@@ -2,6 +2,8 @@ package com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository
 
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.ImageContainer
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Member
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 
 interface MemberRepository : Repository {
@@ -18,4 +20,5 @@ interface MemberRepository : Repository {
     fun getAll(ids: Iterable<Int>): List<Member>
     fun get(id: Int): Member
     fun getByOAuthUserId(providerId: String, providerUserId: String): Member?
+    fun findAll(pageable: Pageable): Page<Member>
 }

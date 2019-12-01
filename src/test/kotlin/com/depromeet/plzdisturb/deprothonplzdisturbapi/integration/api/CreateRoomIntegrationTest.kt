@@ -3,13 +3,12 @@ package com.depromeet.plzdisturb.deprothonplzdisturbapi.integration.api
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.data.model.kakao.KakaoUserResponse
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.controller.Request.Request
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.controller.response.Response
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.Request
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.Response
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.LoginRequest
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.LoginResponse
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.room.RoomResponse
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -31,8 +30,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @SpringBootTest
 @RunWith(SpringRunner::class)
-class CreateRoomTest {
-
+class CreateRoomIntegrationTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
     @Autowired
@@ -42,7 +40,6 @@ class CreateRoomTest {
     private lateinit var kakaoRepository: OAuthRepository
 
     private lateinit var accessToken: String
-    private val jacksonObjectMapper = jacksonObjectMapper()
 
     @Before
     fun setUp() {
@@ -62,8 +59,8 @@ class CreateRoomTest {
             .content(objectMapper.writeValueAsBytes(roomRequest)))
             .andReturn()
         // then
-        assertThat(mvcResult.response.status).isEqualTo(HttpStatus.OK.value())
-        val createRoomResponse: Response<RoomResponse> = jacksonObjectMapper.readValue(mvcResult.response.contentAsString)
+        assertThat(mvcResult.response.status).isEqualTo(HttpStatus.CREATED.value())
+        val createRoomResponse: Response<RoomResponse> = objectMapper.readValue(mvcResult.response.contentAsString)
         assertThat(createRoomResponse.data).isNotNull
     }
 

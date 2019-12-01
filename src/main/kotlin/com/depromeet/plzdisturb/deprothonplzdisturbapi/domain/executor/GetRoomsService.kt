@@ -5,19 +5,29 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberR
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.RoomMemberRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.RoomRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class GetMyRooms(
+class GetRoomsService(
+    private val roomRepository: RoomRepository,
     private val memberRepository: MemberRepository,
     private val roomMemberRepository: RoomMemberRepository
-) : Executor<GetMyRooms.Param, List<Room>> {
+) : Executor<GetRoomsService.Param, Room> {
 
-    override fun execute(param: Param): List<Room> = param.let { (memberId) ->
+    @Transactional
+    override fun execute(param: Param): Room = param.let { (memberId, code) ->
+        val room = roomRepository.get(code)
         val member = memberRepository.get(memberId)
-        roomMemberRepository.getRooms(member)
+        val roomMembers = roomMemberRepository.getMembers(room)
+        if (roomMembers.contains(member))
+            room.copy(
+                members = roomMembers
+            )
+        else throw IllegalArgumentException("member not exist")
     }
 
     data class Param(
-        val memberId: Int
+        val memberId: Int,
+        val code: String
     ) : Executor.Param
 }

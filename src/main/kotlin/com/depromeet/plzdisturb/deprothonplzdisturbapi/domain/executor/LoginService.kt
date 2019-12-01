@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class Login(
+class LoginService(
     private val kakaoRepository: OAuthRepository,
     private val memberRepository: MemberRepository,
     private val jwtFactory: JwtFactory
-) : Executor<Login.Param, AccessToken> {
+) : Executor<LoginService.Param, AccessToken> {
+
     @Transactional
     override fun execute(param: Param): AccessToken {
         // 카카오 api 호출

@@ -1,9 +1,8 @@
 package com.depromeet.plzdisturb.deprothonplzdisturbapi.integration.executor
 
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.data.model.kakao.KakaoUserResponse
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Member
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.CreateRoom
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.Login
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.CreateRoomService
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.LoginService
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
 import org.assertj.core.api.Assertions.assertThat
@@ -17,15 +16,15 @@ import org.springframework.transaction.annotation.Transactional
 @Suppress("NonAsciiCharacters")
 @Transactional
 @SpringBootTest
-class CreateRoomTest {
+class CreateRoomServiceTest {
     @Autowired
-    private lateinit var createRoom: CreateRoom
+    private lateinit var createRoomService: CreateRoomService
 
     @MockBean
     private lateinit var kakaoRepository: OAuthRepository
 
     @Autowired
-    private lateinit var login: Login
+    private lateinit var loginService: LoginService
 
     @Test
     fun test_execute() {
@@ -42,16 +41,16 @@ class CreateRoomTest {
             )
         )
 
-        val token = login.execute(
-            Login.Param(
+        val token = loginService.execute(
+            LoginService.Param(
                 dummy,
                 "device"
             )
         )
         val name = "name"
         // when
-        val room = createRoom.execute(
-            CreateRoom.Param(name, 1)
+        val room = createRoomService.execute(
+            CreateRoomService.Param(name, 1)
         )
         // then
         assertThat(room.name).isEqualTo("name")
