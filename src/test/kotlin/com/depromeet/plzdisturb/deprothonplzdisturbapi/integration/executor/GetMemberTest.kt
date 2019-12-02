@@ -1,8 +1,8 @@
 package com.depromeet.plzdisturb.deprothonplzdisturbapi.integration.executor
 
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.data.model.kakao.KakaoUserResponse
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.GetMemberService
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.LoginService
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.GetMember
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.Login
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.jwt.JwtFactory
@@ -23,13 +23,13 @@ class GetMemberTest {
     private lateinit var jwtFactory: JwtFactory
 
     @Autowired
-    private lateinit var getMember: GetMemberService
+    private lateinit var getMember: GetMember
 
     @MockBean
     private lateinit var kakaoRepository: OAuthRepository
 
     @Autowired
-    private lateinit var loginService: LoginService
+    private lateinit var login: Login
 
     @Test
     fun test_execute() {
@@ -45,8 +45,8 @@ class GetMemberTest {
                 )
             )
         )
-        val token = loginService.execute(
-            LoginService.Param(
+        val token = login.execute(
+            Login.Param(
                 dummy,
                 "device"
             )
@@ -54,7 +54,7 @@ class GetMemberTest {
         val memberId = jwtFactory.decodeToken("bearer ${token.value}").get()
         // when
         val target = getMember.execute(
-            GetMemberService.Param(memberId)
+            GetMember.Param(memberId)
         )
         // then
         assertThat(target.id).isEqualTo(memberId)

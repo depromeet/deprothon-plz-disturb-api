@@ -3,15 +3,13 @@ package com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.entity.Member
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
-class GetMemberService(
+class GetMember(
     private val memberRepository: MemberRepository
-) : Executor<GetMemberService.Param, Member> {
+) : Executor<GetMember.Param, Member> {
 
-    @Transactional
-    override fun execute(param: GetMemberService.Param) = param.let { (memberId) ->
+    override fun execute(param: Param): Member = param.let { (memberId) ->
         memberRepository.get(memberId)
     }
 
@@ -19,4 +17,3 @@ class GetMemberService(
         val memberId: Int
     ) : Executor.Param
 }
-

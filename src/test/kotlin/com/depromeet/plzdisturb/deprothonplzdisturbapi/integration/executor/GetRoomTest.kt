@@ -1,9 +1,9 @@
 package com.depromeet.plzdisturb.deprothonplzdisturbapi.integration.executor
 
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.data.model.kakao.KakaoUserResponse
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.CreateRoomService
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.JoinRoomService
-import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.LoginService
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.CreateRoom
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.GetRoom
+import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.executor.Login
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.OAuthRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.vo.AccessToken
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.presentation.login.jwt.JwtFactory
@@ -18,22 +18,22 @@ import org.springframework.transaction.annotation.Transactional
 @Suppress("NonAsciiCharacters")
 @Transactional
 @SpringBootTest
-class JoinRoomServiceTest {
+class GetRoomTest {
 
     @Autowired
     private lateinit var jwtFactory: JwtFactory
 
     @Autowired
-    private lateinit var createRoomService: CreateRoomService
+    private lateinit var createRoom: CreateRoom
 
     @Autowired
-    private lateinit var joinRoomService: JoinRoomService
+    private lateinit var getRoom: GetRoom
 
     @MockBean
     private lateinit var kakaoRepository: OAuthRepository
 
     @Autowired
-    private lateinit var loginService: LoginService
+    private lateinit var login: Login
 
     @Test
     fun test_execute() {
@@ -49,37 +49,21 @@ class JoinRoomServiceTest {
                 )
             )
         )
-        val token = loginService.execute(
-            LoginService.Param(
+
+        val token = login.execute(
+            Login.Param(
                 dummy,
                 "device"
             )
         )
         val memberId = jwtFactory.decodeToken("bearer ${token.value}").get()
-        val dummy2 = AccessToken("ss2")
-        Mockito.`when`(kakaoRepository.getUserInfo(dummy2.value)).thenReturn(
-            KakaoUserResponse(
-                2,
-                mapOf(
-                    "nickname" to "name",
-                    "profile_image" to "profile"
 
-                )
-            )
-        )
-        val token2 = loginService.execute(
-            LoginService.Param(
-                dummy2,
-                "device"
-            )
-        )
-        val memberId2 = jwtFactory.decodeToken("bearer ${token2.value}").get()
-        val room = createRoomService.execute(
-            CreateRoomService.Param("group", memberId)
+        val room = createRoom.execute(
+            CreateRoom.Param("group", memberId)
         )
         // when
-        val target = joinRoomService.execute(
-            JoinRoomService.Param(memberId2, room.code)
+        val target = getRoom.execute(
+            GetRoom.Param(memberId, room.code)
         )
         // then
         assertThat(target).isEqualTo(room)
