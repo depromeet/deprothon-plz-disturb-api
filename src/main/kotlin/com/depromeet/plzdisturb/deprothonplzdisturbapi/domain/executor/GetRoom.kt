@@ -5,16 +5,15 @@ import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.MemberR
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.RoomMemberRepository
 import com.depromeet.plzdisturb.deprothonplzdisturbapi.domain.repository.RoomRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
+import java.lang.IllegalStateException
 
 @Service
-class GetRoomsService(
+class GetRoom(
     private val roomRepository: RoomRepository,
     private val memberRepository: MemberRepository,
     private val roomMemberRepository: RoomMemberRepository
-) : Executor<GetRoomsService.Param, Room> {
+) : Executor<GetRoom.Param, Room> {
 
-    @Transactional
     override fun execute(param: Param): Room = param.let { (memberId, code) ->
         val room = roomRepository.get(code)
         val member = memberRepository.get(memberId)

@@ -1,4 +1,4 @@
-package com.depromeet.plzdisturb.deprothonplzdisturbapi.config
+package com.depromeet.plzdisturb.deprothonplzdisturbapi
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
